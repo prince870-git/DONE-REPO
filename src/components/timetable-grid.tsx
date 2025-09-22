@@ -685,20 +685,20 @@ export const TimetableGrid = React.memo(function TimetableGrid({ timetable, conf
             <div className="relative w-full overflow-hidden" ref={timetableRef}>
               <div className="bg-slate-800/40 rounded-lg border border-slate-600/20 overflow-hidden shadow-lg">
                 <div className="grid grid-cols-6 gap-0 bg-gradient-to-r from-purple-600/15 to-blue-600/15 border-b border-slate-600/20">
-                  <div className="p-1 text-center font-medium text-white border-r border-slate-600/20 bg-slate-700/30">
-                    <span className="text-xs">Time</span>
+                  <div className="p-2 text-center font-medium text-white border-r border-slate-600/20 bg-slate-700/30">
+                    <span className="text-sm font-semibold">Time</span>
                   </div>
                   {days.map((day, index) => (
-                    <div key={day} className={`p-1 text-center font-medium text-white ${index < days.length - 1 ? 'border-r border-slate-600/20' : ''}`}>
-                      <span className="text-xs">{day.substring(0, 3)}</span>
+                    <div key={day} className={`p-2 text-center font-medium text-white ${index < days.length - 1 ? 'border-r border-slate-600/20' : ''}`}>
+                      <span className="text-sm font-semibold">{day.substring(0, 3)}</span>
                     </div>
                   ))}
                 </div>
                 
                 {timeSlots.map((time, timeIndex) => (
                   <div key={time} className={`grid grid-cols-6 gap-0 ${timeIndex < timeSlots.length - 1 ? 'border-b border-slate-600/10' : ''}`}>
-                    <div className="p-1 border-r border-slate-600/20 bg-slate-700/20 flex items-center justify-center min-h-[45px]">
-                      <span className="text-xs font-medium text-slate-300 text-center leading-tight">
+                    <div className="p-2 border-r border-slate-600/20 bg-slate-700/20 flex items-center justify-center min-h-[55px]">
+                      <span className="text-sm font-medium text-slate-300 text-center leading-tight">
                         {time.includes('12:00 - 01:00') ? '🍽️' : time.replace(' - ', '\n')}
                       </span>
                     </div>
@@ -706,11 +706,11 @@ export const TimetableGrid = React.memo(function TimetableGrid({ timetable, conf
                     {days.map((day, dayIndex) => {
                       const entry = getEntry(day, time);
                       return (
-                        <div key={day} className={`p-0.5 min-h-[45px] flex items-center justify-center ${dayIndex < days.length - 1 ? 'border-r border-slate-600/15' : ''}`}>
+                        <div key={day} className={`p-1 min-h-[55px] flex items-center justify-center ${dayIndex < days.length - 1 ? 'border-r border-slate-600/15' : ''}`}>
                           {entry ? (
                             <DialogTrigger asChild>
                               <div 
-                                className={`w-full h-full p-1.5 rounded cursor-pointer transition-all duration-200 border-0 shadow-sm hover:shadow-md ${
+                                className={`w-full h-full p-2 rounded cursor-pointer transition-all duration-200 border-0 shadow-sm hover:shadow-md ${
                                   entry.isConstraintImpact 
                                     ? 'bg-gradient-to-br from-orange-400/25 to-orange-500/15 text-orange-50'
                                     : entry.constraintType === 'Teaching Practice'
@@ -719,8 +719,8 @@ export const TimetableGrid = React.memo(function TimetableGrid({ timetable, conf
                                 } backdrop-blur-sm`}
                                 onClick={() => setSelectedEntry(entry)}
                               >
-                                <div className="space-y-0 text-center">
-                                  <p className="font-bold text-xs leading-tight truncate">{entry.course}</p>
+                                <div className="space-y-0.5 text-center">
+                                  <p className="font-bold text-sm leading-tight truncate">{entry.course}</p>
                                   <p className="text-xs opacity-80 truncate">{entry.faculty}</p>
                                   <p className="text-xs opacity-70">{entry.room}</p>
                                 </div>
@@ -729,9 +729,9 @@ export const TimetableGrid = React.memo(function TimetableGrid({ timetable, conf
                           ) : (
                             <div className="w-full h-full flex items-center justify-center">
                               {time.includes("12:00 - 01:00") ? (
-                                <span className="text-lg">🍽️</span>
+                                <span className="text-xl">🍽️</span>
                               ) : (
-                                <span className="text-xs text-slate-500">—</span>
+                                <span className="text-sm text-slate-500">—</span>
                               )}
                             </div>
                           )}
@@ -793,44 +793,115 @@ export const TimetableGrid = React.memo(function TimetableGrid({ timetable, conf
                 
                 <CardContent className="relative z-10 space-y-4">
                   {/* Quick Stats Grid */}
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
-                    <div className="bg-gradient-to-br from-purple-800/30 to-purple-700/20 p-2 rounded-lg border border-purple-500/30">
-                      <div className="flex items-center gap-1 mb-1">
-                        <div className="w-1.5 h-1.5 bg-purple-400 rounded-full animate-pulse"></div>
-                        <span className="text-purple-300 text-xs font-medium">Classes</span>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                    <div className="bg-gradient-to-br from-purple-800/40 to-purple-700/30 p-3 rounded-lg border border-purple-500/40 transition-all duration-300 hover:border-purple-400/60">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
+                        <span className="text-purple-300 text-sm font-medium">Classes</span>
                       </div>
-                      <div className="text-lg font-bold text-white">{timetable.filter(entry => !entry.time.includes('Lunch')).length}</div>
+                      <div className="text-2xl font-bold text-white mb-1">{timetable.filter(entry => !entry.time.includes('Lunch')).length}</div>
+                      <div className="w-full bg-purple-900/50 rounded-full h-1.5">
+                        <div className="bg-purple-400 h-1.5 rounded-full transition-all duration-1000" style={{width: `${Math.min(100, (timetable.filter(entry => !entry.time.includes('Lunch')).length / 35) * 100)}%`}}></div>
+                      </div>
                     </div>
                     
-                    <div className="bg-gradient-to-br from-blue-800/30 to-blue-700/20 p-2 rounded-lg border border-blue-500/30">
-                      <div className="flex items-center gap-1 mb-1">
-                        <div className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
-                        <span className="text-blue-300 text-xs font-medium">Faculty</span>
+                    <div className="bg-gradient-to-br from-blue-800/40 to-blue-700/30 p-3 rounded-lg border border-blue-500/40 transition-all duration-300 hover:border-blue-400/60">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
+                        <span className="text-blue-300 text-sm font-medium">Faculty</span>
                       </div>
-                      <div className="text-lg font-bold text-white">{new Set(timetable.map(entry => entry.faculty)).size}</div>
+                      <div className="text-2xl font-bold text-white mb-1">{new Set(timetable.map(entry => entry.faculty)).size}</div>
+                      <div className="w-full bg-blue-900/50 rounded-full h-1.5">
+                        <div className="bg-blue-400 h-1.5 rounded-full transition-all duration-1000" style={{width: `${Math.min(100, (new Set(timetable.map(entry => entry.faculty)).size / 25) * 100)}%`}}></div>
+                      </div>
                     </div>
                     
-                    <div className="bg-gradient-to-br from-indigo-800/30 to-indigo-700/20 p-2 rounded-lg border border-indigo-500/30">
-                      <div className="flex items-center gap-1 mb-1">
-                        <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
-                        <span className="text-indigo-300 text-xs font-medium">Rooms</span>
+                    <div className="bg-gradient-to-br from-indigo-800/40 to-indigo-700/30 p-3 rounded-lg border border-indigo-500/40 transition-all duration-300 hover:border-indigo-400/60">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="w-2 h-2 bg-indigo-400 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
+                        <span className="text-indigo-300 text-sm font-medium">Rooms</span>
                       </div>
-                      <div className="text-lg font-bold text-white">{new Set(timetable.map(entry => entry.room)).size}</div>
+                      <div className="text-2xl font-bold text-white mb-1">{new Set(timetable.map(entry => entry.room)).size}</div>
+                      <div className="w-full bg-indigo-900/50 rounded-full h-1.5">
+                        <div className="bg-indigo-400 h-1.5 rounded-full transition-all duration-1000" style={{width: `${Math.min(100, (new Set(timetable.map(entry => entry.room)).size / 30) * 100)}%`}}></div>
+                      </div>
                     </div>
                     
-                    <div className="bg-gradient-to-br from-violet-800/30 to-violet-700/20 p-2 rounded-lg border border-violet-500/30">
-                      <div className="flex items-center gap-1 mb-1">
-                        <div className="w-1.5 h-1.5 bg-violet-400 rounded-full animate-pulse" style={{animationDelay: '1.5s'}}></div>
-                        <span className="text-violet-300 text-xs font-medium">Efficiency</span>
+                    <div className="bg-gradient-to-br from-violet-800/40 to-violet-700/30 p-3 rounded-lg border border-violet-500/40 transition-all duration-300 hover:border-violet-400/60">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="w-2 h-2 bg-violet-400 rounded-full animate-pulse" style={{animationDelay: '1.5s'}}></div>
+                        <span className="text-violet-300 text-sm font-medium">Efficiency</span>
                       </div>
-                      <div className="text-lg font-bold text-white">{Math.round((timetable.filter(entry => !entry.time.includes('Lunch')).length / (5 * 6)) * 100)}%</div>
+                      <div className="text-2xl font-bold text-white mb-1">{Math.round((timetable.filter(entry => !entry.time.includes('Lunch')).length / (5 * 6)) * 100)}%</div>
+                      <div className="w-full bg-violet-900/50 rounded-full h-1.5">
+                        <div className="bg-violet-400 h-1.5 rounded-full transition-all duration-1000" style={{width: `${Math.round((timetable.filter(entry => !entry.time.includes('Lunch')).length / (5 * 6)) * 100)}%`}}></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Charts Section */}
+                  <div className="grid md:grid-cols-2 gap-4 mb-4">
+                    {/* Faculty Workload Chart */}
+                    <div className="bg-slate-800/60 rounded-lg p-4 border border-slate-600/30">
+                      <h4 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
+                        <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                        Faculty Distribution
+                      </h4>
+                      <div className="space-y-2">
+                        {[...new Set(timetable.map(entry => entry.faculty))].slice(0, 5).map((faculty, idx) => {
+                          const facultyHours = timetable.filter(entry => entry.faculty === faculty).length;
+                          const maxHours = Math.max(...[...new Set(timetable.map(entry => entry.faculty))].map(f => 
+                            timetable.filter(entry => entry.faculty === f).length
+                          ));
+                          return (
+                            <div key={idx} className="flex items-center gap-2">
+                              <span className="text-xs text-slate-300 w-16 truncate">{faculty.split(' ').slice(-1)[0]}</span>
+                              <div className="flex-1 bg-slate-700 rounded-full h-2">
+                                <div 
+                                  className="bg-gradient-to-r from-green-400 to-blue-400 h-2 rounded-full transition-all duration-1000" 
+                                  style={{width: `${(facultyHours / maxHours) * 100}%`}}
+                                ></div>
+                              </div>
+                              <span className="text-xs text-slate-400 w-6">{facultyHours}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Room Utilization Chart */}
+                    <div className="bg-slate-800/60 rounded-lg p-4 border border-slate-600/30">
+                      <h4 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
+                        <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
+                        Room Usage
+                      </h4>
+                      <div className="space-y-2">
+                        {[...new Set(timetable.map(entry => entry.room))].slice(0, 5).map((room, idx) => {
+                          const roomHours = timetable.filter(entry => entry.room === room).length;
+                          const maxRoomHours = Math.max(...[...new Set(timetable.map(entry => entry.room))].map(r => 
+                            timetable.filter(entry => entry.room === r).length
+                          ));
+                          return (
+                            <div key={idx} className="flex items-center gap-2">
+                              <span className="text-xs text-slate-300 w-16 truncate">{room}</span>
+                              <div className="flex-1 bg-slate-700 rounded-full h-2">
+                                <div 
+                                  className="bg-gradient-to-r from-orange-400 to-red-400 h-2 rounded-full transition-all duration-1000" 
+                                  style={{width: `${(roomHours / maxRoomHours) * 100}%`}}
+                                ></div>
+                              </div>
+                              <span className="text-xs text-slate-400 w-6">{roomHours}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
                   
                   {/* Compact AI Report Section */}
-                  <div className="bg-slate-800/60 rounded-lg p-3 border border-slate-600/30">
-                    <h3 className="text-sm font-semibold text-white mb-2 flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></div>
+                  <div className="bg-slate-800/60 rounded-lg p-4 border border-slate-600/30">
+                    <h3 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
+                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
                       AI Analysis Report
                     </h3>
                     <div className="prose prose-invert max-w-none text-slate-300 text-xs leading-relaxed whitespace-pre-wrap max-h-32 overflow-y-auto">
