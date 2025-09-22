@@ -1,0 +1,45 @@
+{
+  "extends": ["stylelint-config-standard"],
+  "rules": {
+    "at-rule-no-unknown": [
+      true,
+      {
+        "ignoreAtRules": [
+          "tailwind",
+          "apply",
+          "variants",
+          "responsive",
+          "screen",
+          "layer",
+          "keyframes"
+        ]
+      }
+    ],
+    "declaration-block-no-duplicate-custom-properties": null,
+    "no-duplicate-selectors": null,
+    "no-descending-specificity": null,
+    "keyframes-name-pattern": null,
+    "selector-class-pattern": null,
+    "declaration-block-single-line-max-declarations": null,
+    "function-no-unknown": [
+      true,
+      {
+        "ignoreFunctions": ["theme", "screen"]
+      }
+    ],
+    "property-no-unknown": [
+      true,
+      {
+        "ignoreProperties": ["@apply", "@layer", "@tailwind"]
+      }
+    ],
+    "value-no-vendor-prefix": null,
+    "property-no-vendor-prefix": null,
+    "selector-pseudo-class-no-unknown": [
+      true,
+      {
+        "ignorePseudoClasses": ["global"]
+      }
+    ]
+  }
+}
