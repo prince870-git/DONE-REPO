@@ -274,14 +274,167 @@ ${reportData.lowUtilizationRooms.length > 0 ?
       {/* Detailed Report Section */}
       <Card>
         <CardHeader>
-          <CardTitle>Comprehensive Timetable Analysis</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-xl font-semibold">Comprehensive Timetable Analysis</CardTitle>
+          <CardDescription className="text-sm">
             Detailed breakdown of workload distribution, resource utilization, and optimization recommendations.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="prose prose-invert max-w-none text-foreground/90 whitespace-pre-wrap font-mono text-sm">
-            {generateDetailedReport()}
+          <div className="space-y-6 text-sm leading-relaxed">
+            {/* Executive Summary */}
+            <div className="bg-slate-50 dark:bg-slate-900/50 rounded-lg p-4 space-y-2">
+              <h3 className="font-semibold text-base text-slate-900 dark:text-slate-100 mb-3 flex items-center gap-2">
+                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                Executive Summary
+              </h3>
+              <div className="grid md:grid-cols-2 gap-3 text-slate-700 dark:text-slate-300">
+                <div className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                  <span className="font-medium">Total Classes:</span> {reportData?.scheduledHours || 0}
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
+                  <span className="font-medium">Room Utilization:</span> {reportData?.roomUtilizationPercentage.toFixed(1)}%
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 bg-purple-500 rounded-full"></span>
+                  <span className="font-medium">Faculty Utilization:</span> {reportData?.facultyUtilizationPercentage.toFixed(1)}%
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 bg-orange-500 rounded-full"></span>
+                  <span className="font-medium">Peak Hour:</span> {reportData?.peakHour || 'N/A'}
+                </div>
+              </div>
+            </div>
+
+            {/* Faculty Workload */}
+            <div className="space-y-3">
+              <h3 className="font-semibold text-base text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                Faculty Workload Analysis
+              </h3>
+              
+              <div className="bg-slate-50 dark:bg-slate-900/30 rounded-lg p-4 space-y-3">
+                <h4 className="font-medium text-slate-800 dark:text-slate-200 text-sm">Workload Distribution:</h4>
+                <div className="grid gap-2">
+                  {reportData?.facultyWorkload.slice(0, 6).map((f, idx) => (
+                    <div key={idx} className="flex items-center justify-between text-xs py-1 px-2 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                      <span className="font-medium text-slate-700 dark:text-slate-300">{f.name.split(' ').slice(-1)[0]}</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-slate-600 dark:text-slate-400">{f.assignedHours}/{f.expectedWorkload}h</span>
+                        <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${
+                          f.status === 'Optimal' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
+                          f.status === 'Overloaded' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' :
+                          'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
+                        }`}>
+                          {f.status}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {reportData?.overloadedFaculty && reportData.overloadedFaculty.length > 0 && (
+                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
+                  <h4 className="font-medium text-red-800 dark:text-red-200 text-sm mb-2 flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-red-500 rounded-full"></span>
+                    Overloaded Faculty ({reportData.overloadedFaculty.length})
+                  </h4>
+                  <div className="space-y-1 text-xs text-red-700 dark:text-red-300">
+                    {reportData.overloadedFaculty.map((f, idx) => (
+                      <div key={idx} className="flex items-center gap-2">
+                        <span>•</span>
+                        <span>{f.name}: {f.assignedHours}h assigned (+{(f.utilizationPercentage - 100).toFixed(0)}% over)</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Room Utilization */}
+            <div className="space-y-3">
+              <h3 className="font-semibold text-base text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                Room Utilization Analysis
+              </h3>
+              
+              <div className="bg-slate-50 dark:bg-slate-900/30 rounded-lg p-4 space-y-3">
+                <div className="grid md:grid-cols-2 gap-3">
+                  {reportData?.roomUtilization.slice(0, 8).map((r, idx) => (
+                    <div key={idx} className="flex items-center justify-between text-xs py-1.5 px-2 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                      <span className="font-medium text-slate-700 dark:text-slate-300 truncate">{r.name}</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-slate-600 dark:text-slate-400">{r.utilizationPercentage.toFixed(0)}%</span>
+                        <span className={`w-2 h-2 rounded-full ${
+                          r.status === 'High' ? 'bg-red-500' :
+                          r.status === 'Moderate' ? 'bg-yellow-500' : 'bg-green-500'
+                        }`}></span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Recommendations */}
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+              <h3 className="font-semibold text-base text-blue-900 dark:text-blue-100 mb-3 flex items-center gap-2">
+                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                Key Recommendations
+              </h3>
+              <div className="space-y-2 text-xs text-blue-800 dark:text-blue-200">
+                {reportData?.overloadedFaculty && reportData.overloadedFaculty.length > 0 ? (
+                  <div className="flex items-start gap-2">
+                    <span className="text-blue-500 mt-1">→</span>
+                    <span>Redistribute workload for {reportData.overloadedFaculty.length} overloaded faculty members</span>
+                  </div>
+                ) : (
+                  <div className="flex items-start gap-2">
+                    <span className="text-green-500 mt-1">✓</span>
+                    <span>Faculty workload is optimally balanced</span>
+                  </div>
+                )}
+                {reportData?.lowUtilizationRooms && reportData.lowUtilizationRooms.length > 0 ? (
+                  <div className="flex items-start gap-2">
+                    <span className="text-blue-500 mt-1">→</span>
+                    <span>Consider consolidating classes in {reportData.lowUtilizationRooms.length} underutilized rooms</span>
+                  </div>
+                ) : (
+                  <div className="flex items-start gap-2">
+                    <span className="text-green-500 mt-1">✓</span>
+                    <span>Room utilization is efficiently distributed</span>
+                  </div>
+                )}
+                <div className="flex items-start gap-2">
+                  <span className="text-blue-500 mt-1">→</span>
+                  <span>Monitor peak hours for potential load balancing opportunities</span>
+                </div>
+              </div>
+            </div>
+
+            {/* System Metrics */}
+            <div className="bg-slate-50 dark:bg-slate-900/50 rounded-lg p-4">
+              <h3 className="font-semibold text-sm text-slate-900 dark:text-slate-100 mb-3 flex items-center gap-2">
+                <div className="w-1.5 h-1.5 bg-slate-500 rounded-full"></div>
+                System Performance
+              </h3>
+              <div className="grid md:grid-cols-3 gap-3 text-xs text-slate-600 dark:text-slate-400">
+                <div className="flex items-center gap-2">
+                  <span>Conflicts Resolved:</span>
+                  <span className="font-medium">{timetableResult.conflicts?.length || 0}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span>Efficiency Rate:</span>
+                  <span className="font-medium">{reportData ? ((reportData.roomUtilizationPercentage + reportData.facultyUtilizationPercentage) / 2).toFixed(1) : '0'}%</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span>Generated:</span>
+                  <span className="font-medium">{new Date().toLocaleDateString()}</span>
+                </div>
+              </div>
+            </div>
           </div>
         </CardContent>
       </Card>
