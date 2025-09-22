@@ -26,11 +26,9 @@ import {
   ChartLegendContent
 } from "@/components/ui/chart";
 import { Bar, BarChart, XAxis, YAxis, CartesianGrid, Cell, Legend, Tooltip, ResponsiveContainer } from "recharts";
-import { Users, DoorOpen, Clock, FileText, Gauge, GraduationCap, ShieldCheck, BarChart2, Wand2 } from "lucide-react";
+import { Users, DoorOpen, Clock, GraduationCap, ShieldCheck, BarChart2, Wand2, Gauge } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ExternalLink } from "lucide-react";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Student, Course, TimetableEntry } from "@/lib/types";
 
@@ -323,73 +321,43 @@ export default function AnalyticsPage() {
         </CardContent>
       </Card>
 
-      <div className="grid gap-6 lg:grid-cols-5">
-        <Card className="lg:col-span-3 interactive-element">
-            <CardHeader>
-                <CardTitle>Resource Utilization Heatmap</CardTitle>
-                <CardDescription>
-                Daily booked hours for each room and lab across the week.
-                </CardDescription>
-            </CardHeader>
-            <CardContent className="pl-2">
-                <div style={{ height: '300px' }}>
-                    <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={heatmapData}>
-                            <CartesianGrid vertical={false} />
-                            <XAxis
-                            dataKey="day"
-                            tickLine={false}
-                            tickMargin={10}
-                            axisLine={false}
-                            fontSize={12}
-                            />
-                            <YAxis fontSize={12} allowDecimals={false} />
-                            <Tooltip
-                                cursor={false}
-                                contentStyle={{ 
-                                    backgroundColor: 'hsl(var(--background))', 
-                                    border: '1px solid hsl(var(--border))', 
-                                    borderRadius: 'var(--radius)' 
-                                }}
-                            />
-                            <Legend iconSize={10} />
-                            {rooms.map((room, index) => (
-                                <Bar key={room.id} dataKey={room.name} name={room.name} stackId="a" fill={chartColors[index % chartColors.length]} radius={4} />
-                            ))}
-                        </BarChart>
-                    </ResponsiveContainer>
-                </div>
-                 <Accordion type="single" collapsible className="w-full mt-4">
-                    <AccordionItem value="item-1">
-                        <AccordionTrigger className="text-sm text-muted-foreground">
-                            <div className="flex items-center gap-2">
-                                <Table className="h-4 w-4" />
-                                <span>View Raw Data</span>
-                            </div>
-                        </AccordionTrigger>
-                        <AccordionContent>
-                            <pre className="text-xs p-4 bg-muted/50 rounded-md overflow-x-auto">
-                                {JSON.stringify(heatmapData, null, 2)}
-                            </pre>
-                        </AccordionContent>
-                    </AccordionItem>
-                </Accordion>
-            </CardContent>
-        </Card>
-        <Card className="lg:col-span-2 interactive-element">
-            <CardHeader>
-                <CardTitle>Generation Report</CardTitle>
-                <CardDescription>View the detailed report from the AI generator.</CardDescription>
-            </CardHeader>
-            <CardContent className="flex flex-col items-center justify-center text-center h-4/5">
-                <FileText className="h-12 w-12 text-muted-foreground mb-4" />
-                <p className="text-sm text-muted-foreground mb-4">The full generation report is available on the Reports page.</p>
-                <Link href="/reports">
-                    <Button>View Report <ExternalLink className="ml-2 h-4 w-4" /></Button>
-                </Link>
-            </CardContent>
-        </Card>
-      </div>
+      <Card className="interactive-element">
+          <CardHeader>
+              <CardTitle>Resource Utilization Heatmap</CardTitle>
+              <CardDescription>
+              Daily booked hours for each room and lab across the week.
+              </CardDescription>
+          </CardHeader>
+          <CardContent className="pl-2">
+              <div style={{ height: '400px' }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={heatmapData}>
+                          <CartesianGrid vertical={false} />
+                          <XAxis
+                          dataKey="day"
+                          tickLine={false}
+                          tickMargin={10}
+                          axisLine={false}
+                          fontSize={12}
+                          />
+                          <YAxis fontSize={12} allowDecimals={false} />
+                          <Tooltip
+                              cursor={false}
+                              contentStyle={{ 
+                                  backgroundColor: 'hsl(var(--background))', 
+                                  border: '1px solid hsl(var(--border))', 
+                                  borderRadius: 'var(--radius)' 
+                              }}
+                          />
+                          <Legend iconSize={10} />
+                          {rooms.map((room, index) => (
+                              <Bar key={room.id} dataKey={room.name} name={room.name} stackId="a" fill={chartColors[index % chartColors.length]} radius={4} />
+                          ))}
+                      </BarChart>
+                  </ResponsiveContainer>
+              </div>
+          </CardContent>
+      </Card>
       
        <Card className="interactive-element">
         <CardHeader>
