@@ -9,6 +9,7 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  actions: write
 
 concurrency:
   group: "pages"
@@ -26,11 +27,6 @@ jobs:
         with:
           node-version: '18'
           cache: 'npm'
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-        with:
-          static_site_generator: next
 
       - name: Install dependencies
         run: npm ci
@@ -113,6 +109,11 @@ jobs:
           npm pkg delete devDependencies.eslint-config-next
           # Build without ESLint
           npm run build
+          # Create .nojekyll file for GitHub Pages
+          touch ./out/.nojekyll
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
